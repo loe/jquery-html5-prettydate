@@ -3,11 +3,10 @@
 * Copyright (c) 2008 John Resig (jquery.com)
 * Licensed under the MIT license.
 */
-
 (function($) {
   var methods = {
-    formatTime: function(time) {
-      var date = new Date((time || "").replace(/-/g,"/").replace(/[TZ]/g," ")),
+    formatDate: function(time) {
+      var date = new Date(time),
       diff = (((new Date()).getTime() - date.getTime()) / 1000),
       day_diff = Math.floor(diff / 86400);
 
@@ -25,14 +24,16 @@
         day_diff < 7 && day_diff + " days ago" ||
         day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
     }
-  }
+  };
 
   $.fn.prettyDate = function() {
     return this.each(function() {
-      var date = methods.formatTime(this.datetime);
+      var date = methods.formatDate($(this).data('time'));
       if (date) {
         $(this).text(date);
       }
     });
   };
+
 })(jQuery);
+
