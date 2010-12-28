@@ -4,7 +4,17 @@
 * Licensed under the MIT license.
 */
 (function($) {
+
   var methods = {
+    init: function() {
+      return this.each(function() {
+        var date = methods.formatDate($(this).data('time'));
+        if (date) {
+          $(this).text(date);
+        }
+      });
+    },
+
     formatDate: function(time) {
       var date = new Date(time),
       diff = (((new Date()).getTime() - date.getTime()) / 1000),
@@ -26,13 +36,14 @@
     }
   };
 
-  $.fn.prettyDate = function() {
-    return this.each(function() {
-      var date = methods.formatDate($(this).data('time'));
-      if (date) {
-        $(this).text(date);
-      }
-    });
+  $.fn.prettyDate = function(method) {
+    if (methods[method]) {
+      return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+    } else if ( typeof method === 'object' || ! method ) {
+      return methods.init.apply(this, arguments);
+    } else {
+      $.error('Method ' +  method + ' does not exist on jQuery.prettyDate');
+    }
   };
 
 })(jQuery);
